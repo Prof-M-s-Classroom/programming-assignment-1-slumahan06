@@ -35,22 +35,48 @@ private:
     int routeLength;
 
 public:
-    SpaceRoute();  // Constructor
-    ~SpaceRoute(); // Destructor
+    SpaceRoute() {
+        head = nullptr;
+        tail = nullptr;
+        routeLength = 0;
+    };  // Constructor
+
+    ~SpaceRoute() {
+        Node<T>* temp = head;
+        while (head) {
+            head = head->next;
+            delete temp;
+            temp = head;
+        }
+    }; // Destructor
 
     void addWaypointAtBeginning(T& data) {
         Node<T>* newWayPoint = new Node<T>(data);
+
+        if (routeLength == 0) {
+            tail = newWayPoint;
+        } else {
+            head->prev = newWayPoint;
+        }
+
         newWayPoint->next = head;
         head = newWayPoint;
+
         routeLength++;
     }
 
     void addWaypointAtEnd(T& data) {
-        Node<T>* newWayPoint = new Node<T>(data);
-        newWayPoint->prev = tail;
-        tail = newWayPoint;
-        routeLength++;
+        if (routeLength == 0) {
+            addWaypointAtBeginning(data);
+        } else {
+            Node<T>* newWayPoint = new Node<T>(data);
+            tail->next = newWayPoint;
+            newWayPoint->prev = tail;
+            tail = newWayPoint;
+            routeLength++;
+        }
     };
+
     void addWaypointAtIndex(int index, T& data) {
         if (index == 0) {
             addWaypointAtBeginning(data);
@@ -70,6 +96,7 @@ public:
 
     };
 
+    //TODO: IF THE LIST IS EMPTY OR OUT OF BOUNDS
     void removeWaypointAtBeginning() {
         Node<T>* temp = head;
         head = temp->next;
@@ -104,16 +131,16 @@ public:
 
     void traverseForward() {
         Node<T>* temp = head;
-        while (temp->next != NULL) {
-            cout << temp << endl;
+        while (temp != NULL) {
+            cout << temp->data << endl;
             temp = temp->next;
         }
     }
 
     void traverseBackward() {
         Node<T>* temp = tail;
-        while (temp->prev != NULL) {
-            cout << temp << endl;
+        while (temp != NULL) {
+            cout << temp->data << endl;
             temp = temp->prev;
         }
     }

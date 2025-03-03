@@ -82,6 +82,8 @@ public:
             addWaypointAtBeginning(data);
         } else if (index == routeLength) {
             addWaypointAtEnd(data);
+        } else if (index < 0 || index > routeLength) {
+            cout << "The given index is invalid" << endl;
         } else {
             Node<T>* newWayPoint = new Node<T>(data);
             Node<T>* afterWayPoint = getWaypoint(index);
@@ -96,26 +98,35 @@ public:
 
     };
 
-    //TODO: IF THE LIST IS EMPTY OR OUT OF BOUNDS
     void removeWaypointAtBeginning() {
-        Node<T>* temp = head;
-        head = temp->next;
-        delete temp;
-        routeLength--;
+        if (routeLength != 0) {
+            Node<T>* temp = head;
+            head = temp->next;
+            delete temp;
+            routeLength--;
+        } else {
+            cout << "The route is empty" << endl;
+        }
     }
 
     void removeWaypointAtEnd() {
-        Node<T>* temp = tail;
-        tail = temp->prev;
-        delete temp;
-        routeLength--;
+        if (routeLength != 0) {
+            Node<T>* temp = tail;
+            tail = temp->prev;
+            delete temp;
+            routeLength--;
+        } else {
+            cout << "The route is empty" << endl;
+        }
     }
 
     void removeWaypointAtIndex(int index) {
         if (index == 0) {
             removeWaypointAtBeginning();
-        } else if (index == routeLength) {
+        } else if (index == routeLength - 1) {
             removeWaypointAtEnd();
+        } else if (index < 0 || index >= routeLength) {
+            cout << "The given index is invalid" << endl;
         } else {
             Node<T>* targetedWayPoint = getWaypoint(index);
             Node<T>* priorWayPoint = targetedWayPoint->prev;
@@ -146,20 +157,27 @@ public:
     }
 
     Node<T>* getWaypoint(int index) {
-        Node<T>* temp = head;
-        for (int i = 0; i < index; i++) {
-            temp = temp->next;
+        if (index < 0 || index >= routeLength) {
+            cout << "The given index is invalid" << endl;
+        } else {
+            Node<T>* temp = head;
+            for (int i = 0; i < index; i++) {
+                temp = temp->next;
+            }
+            return temp;
         }
-        return temp;
     };
 
 
     void setWaypoint(int index, T& data) {
-        Node<T>* temp = head;
-        for (int i = 0; i < index; i++) {
-            temp = temp->next;
+        if (index < 0 || index >= routeLength) {
+            cout << "The given index is invalid" << endl;
+        } else if (routeLength == 0) {
+            cout << "The route is empty" << endl;
+        } else {
+            Node<T>* modifyThis = getWaypoint(index);
+            modifyThis->data = data;
         }
-        temp->data = data;
     };
 
     void print(){
